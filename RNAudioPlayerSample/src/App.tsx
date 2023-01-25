@@ -11,12 +11,15 @@ import 'react-native-gesture-handler'
 import React from 'react'
 import StackNavigation from './navigations/Stack'
 import {NavigationContainer} from '@react-navigation/native'
+import {RecoilRoot} from 'recoil'
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <StackNavigation />
-    </NavigationContainer>
+    <RecoilRoot>
+      <NavigationContainer>
+        <StackNavigation />
+      </NavigationContainer>
+    </RecoilRoot>
   )
 }
 
