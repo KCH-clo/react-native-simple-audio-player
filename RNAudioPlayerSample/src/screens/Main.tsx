@@ -1,10 +1,16 @@
 import React, {useEffect} from 'react'
-import {View, Text, Button} from 'react-native'
+import {View} from 'react-native'
 import AudioPlayer from '../components/AudioPlayer'
 import TrackPlayer, {Capability} from 'react-native-track-player'
 import {trackPlayerInitState} from '../atoms/track-player-status'
 import {useRecoilState} from 'recoil'
-import PlayList from '../components/PlayList'
+import {TouchableOpacity} from 'react-native-gesture-handler'
+import styled from 'styled-components/native'
+
+const PlayListText = styled.Text`
+  font-size: 20px;
+  color: blue;
+`
 
 export default function Main({navigation}: any) {
   const [trackPlayerInit, setTrackPlayerInit] =
@@ -32,11 +38,13 @@ export default function Main({navigation}: any) {
     }
 
     if (!trackPlayerInit) setupTrackPlayer()
-  }, [])
+  }, [setTrackPlayerInit, trackPlayerInit])
 
   return (
     <View>
-      {/* <PlayList /> */}
+      <TouchableOpacity onPress={() => navigation.navigate('MusicList')}>
+        <PlayListText>PlayList</PlayListText>
+      </TouchableOpacity>
       <AudioPlayer />
     </View>
   )

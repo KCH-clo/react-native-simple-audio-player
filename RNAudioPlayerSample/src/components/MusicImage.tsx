@@ -1,4 +1,4 @@
-import {useWindowDimensions, Image} from 'react-native'
+import {useWindowDimensions} from 'react-native'
 import React from 'react'
 import styled from 'styled-components/native'
 import MusicIcon from '../assets/images/noun_project_928.png'

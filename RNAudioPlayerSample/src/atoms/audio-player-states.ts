@@ -3,6 +3,7 @@ import {atom} from 'recoil'
 interface Track {
   url: string
   imageUrl: string
+  name: string
 }
 
 interface PlayerStatus {
@@ -15,12 +16,7 @@ interface PlayerStatus {
 
 export const playlistState = atom<Track[]>({
   key: 'play-list',
-  default: [
-    {
-      url: 'https://llliliiil.ililllliliillilliliil.li/direct/n3FV2bthY/',
-      imageUrl: '',
-    },
-  ],
+  default: [],
 })
 
 export const currentTrackIndexState = atom<number>({

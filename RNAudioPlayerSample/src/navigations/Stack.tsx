@@ -1,7 +1,7 @@
 import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack'
 import Main from '../screens/Main'
-import History from '../screens/History'
+import MusicList from '../screens/MusicList'
 
 const Stack = createStackNavigator()
 
@@ -13,7 +13,7 @@ const StackNavigation = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="Main" component={Main} />
-      <Stack.Screen name="History" component={History} />
+      <Stack.Screen name="MusicList" component={MusicList} />
     </Stack.Navigator>
   )
 }
