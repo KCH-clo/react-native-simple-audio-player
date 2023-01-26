@@ -1,5 +1,11 @@
 # react-native-simple-audio-player
 
+## Evironment
+1. React Native 70.6
+2. Typescript
+3. React 18
+4. Recoil
+
 # Windows
 
 ## Typescript
