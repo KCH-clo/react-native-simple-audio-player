@@ -4,6 +4,8 @@ import PlayIcon from '../assets/svgs/play-svgrepo-com.svg'
 import PauseIcon from '../assets/svgs/pause-svgrepo-com.svg'
 import SkipForwardIcon from '../assets/svgs/skip-forward-svgrepo-com.svg'
 import SkipPrevIcon from '../assets/svgs/skip-previous-svgrepo-com.svg'
+import ShuffleIcon from '../assets/images/shuffle.png'
+import ExchangeIcon from '../assets/images/exchange.png'
 import Slider from '@react-native-community/slider'
 import styled from 'styled-components/native'
 import TrackPlayer, {
@@ -17,7 +19,8 @@ import {
 } from '../atoms/audio-player-states'
 import MusicImage from './MusicImage'
 import {timeToString} from '../utils/time'
-import {Text, TouchableOpacity} from 'react-native'
+import {Image, Text, TouchableOpacity} from 'react-native'
+import {getRandomInt} from '../utils/random'
 
 const Container = styled.View`
   padding: 0 10px;
@@ -69,6 +72,7 @@ export default function AudioPlayer() {
   const playlist = useRecoilValue(playlistState)
   const [trackIndex, setTrackIndex] = useRecoilState(currentTrackIndexState)
   const [isPlaying, setPlaying] = useState<boolean>(false)
+  const [isShuffle, setShuffle] = useState<boolean>(false)
 
   const progress = useProgress(200)
   const playState = usePlaybackState()
@@ -95,9 +99,13 @@ export default function AudioPlayer() {
     }
   }
 
+  const toggleShuffle = async () => {
+    setShuffle(Boolean(!isShuffle))
+  }
+
   const play = useCallback(
     async (index: number) => {
-      if (!playlist.length) return
+      if (!playlist.length || index < 0 || index >= playlist.length) return
 
       const track = {
         url: playlist[index].url,
@@ -141,10 +149,20 @@ export default function AudioPlayer() {
     if (isPlaying) await TrackPlayer.play()
   }
 
+  const playRandomly = async () => {
+    if (!playlist.length) return
+
+    const randInt = getRandomInt(0, playlist.length)
+    setTrackIndex(randInt)
+    await play(randInt)
+    if (isPlaying) await TrackPlayer.play()
+  }
+
   useEffect(() => {
     const keepPlaying = async () => {
       await TrackPlayer.pause()
-      handleNext()
+      if (isShuffle) playRandomly()
+      else handleNext()
     }
 
     if (
@@ -189,6 +207,12 @@ export default function AudioPlayer() {
           />
         </AudioPlayerSliderContainer>
         <AudioPlayerButtonsContainer>
+          <TouchableOpacity onPress={toggleShuffle}>
+            <Image
+              source={isShuffle ? ShuffleIcon : ExchangeIcon}
+              style={{width: 30, height: 30}}
+            />
+          </TouchableOpacity>
           <TouchableOpacity onPress={handlePrev}>
             <SkipPrevIcon />
           </TouchableOpacity>
