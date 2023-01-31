@@ -1,12 +1,15 @@
 # react-native-simple-audio-player
 
+## Features
+1. find all music files in the storage.
+2. autoplay
+3. background play
+
 ## Evironment
-1. React Native 70.6
+1. React Native 0.69
 2. Typescript
 3. React 18
 4. Recoil
-
-# Windows
 
 ## Typescript
 
@@ -40,7 +43,8 @@ yarn start
 
 yarn android (in another terminal)
 
-
 ## Preview (Android)
 
-![preview](https://user-images.githubusercontent.com/70503548/214753674-b8eef080-2004-456d-bf8e-e00f7cf3c15c.jpg)
+![preview1](https://user-images.githubusercontent.com/70503548/215698543-587d7807-80be-4b32-b6fd-9e4478a66917.jpg)
+![preview2](https://user-images.githubusercontent.com/70503548/215698558-7e51e49e-83b8-458b-8a2d-0f80b60c50da.jpg)
+
