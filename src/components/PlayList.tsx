@@ -7,12 +7,20 @@ import {
 } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import {useRecoilState} from 'recoil'
-import {playlistState} from '../atoms/audio-player-states'
+import {
+  Track,
+  currentTrackState,
+  playlistState,
+  shuffledPlaylistState,
+} from '../atoms/audio-player-states'
 import RNMusicFileFinder, {MusicInfo} from 'react-native-music-file-finder'
+import {shuffleArray} from '../utils/random'
 
 export default function PlayList() {
   const [musicInfos, setMusicInfos] = useState<MusicInfo[]>([])
   const [playList, setPlaylist] = useRecoilState(playlistState)
+  const [, setShuffledPlaylist] = useRecoilState(shuffledPlaylistState)
+  const [, setCurrentTrack] = useRecoilState(currentTrackState)
 
   const requestPermission = async () => {
     if (Platform.OS === 'android') {
@@ -49,14 +57,17 @@ export default function PlayList() {
           <TouchableOpacity
             key={index}
             onPress={() => {
-              setPlaylist(prev => [
-                ...prev,
-                {
-                  url: musicInfo.path,
-                  name: musicInfo.title,
-                  imageUrl: '',
-                },
-              ])
+              const newTrack = {
+                url: musicInfo.path,
+                name: musicInfo.title,
+                imageUrl: '',
+              }
+              const newPlayList = [...playList, newTrack]
+              setPlaylist(newPlayList)
+              setShuffledPlaylist(shuffleArray<Track>(newPlayList))
+              if (playList.length === 0) {
+                setCurrentTrack(newTrack)
+              }
             }}>
             <Text>{`+ ${musicInfo.title}`}</Text>
           </TouchableOpacity>

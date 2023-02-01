@@ -14,13 +14,15 @@ import TrackPlayer, {
   useProgress,
 } from 'react-native-track-player'
 import {
+  currentShuffledTrackIndexState,
   currentTrackIndexState,
+  currentTrackState,
   playlistState,
+  shuffledPlaylistState,
 } from '../atoms/audio-player-states'
 import MusicImage from './MusicImage'
 import {timeToString} from '../utils/time'
 import {Image, Text, TouchableOpacity} from 'react-native'
-import {getRandomInt} from '../utils/random'
 
 const Container = styled.View`
   padding: 0 10px;
@@ -70,7 +72,12 @@ const Title = styled.Text`
 
 export default function AudioPlayer() {
   const playlist = useRecoilValue(playlistState)
+  const shuffledPlaylist = useRecoilValue(shuffledPlaylistState)
+  const [currentTrack, setCurrentTrack] = useRecoilState(currentTrackState)
   const [trackIndex, setTrackIndex] = useRecoilState(currentTrackIndexState)
+  const [shuffledTrackIndex, setShuffledTrackIndex] = useRecoilState(
+    currentShuffledTrackIndexState,
+  )
   const [isPlaying, setPlaying] = useState<boolean>(false)
   const [isShuffle, setShuffle] = useState<boolean>(false)
 
@@ -93,7 +100,7 @@ export default function AudioPlayer() {
     }
 
     if (state === State.None) {
-      await play(trackIndex)
+      await play(currentTrack.url)
       TrackPlayer.play()
       setPlaying(true)
     }
@@ -103,71 +110,80 @@ export default function AudioPlayer() {
     setShuffle(Boolean(!isShuffle))
   }
 
-  const play = useCallback(
-    async (index: number) => {
-      if (!playlist.length || index < 0 || index >= playlist.length) return
+  const play = useCallback(async (url: string) => {
+    if (!url) return
 
-      const track = {
-        url: playlist[index].url,
-        title: 'music',
-        artist: 'artist',
-      }
+    const track = {
+      url,
+      title: 'music',
+      artist: 'artist',
+    }
 
-      await TrackPlayer.reset()
-      await TrackPlayer.add(track)
-    },
-    [playlist],
-  )
+    await TrackPlayer.reset()
+    await TrackPlayer.add(track)
+  }, [])
 
-  const playNext = useCallback(async () => {
+  const playNext = async () => {
     if (!playlist.length) return
 
-    const nextIndex = (trackIndex + 1) % playlist.length
-    setTrackIndex(nextIndex)
-    await play(nextIndex)
-  }, [play, playlist, trackIndex, setTrackIndex])
+    const nextIndex =
+      ((isShuffle ? shuffledTrackIndex : trackIndex) + 1) % playlist.length
 
-  const playPrev = useCallback(async () => {
+    if (isShuffle) setShuffledTrackIndex(nextIndex)
+    else setTrackIndex(nextIndex)
+
+    const nextTrack = isShuffle
+      ? shuffledPlaylist[nextIndex]
+      : playlist[nextIndex]
+
+    setCurrentTrack({...nextTrack})
+
+    await play(nextTrack.url)
+  }
+
+  const playPrev = async () => {
     if (!playlist.length) return
 
-    const prevIndex = Math.max(0, trackIndex - 1)
-    setTrackIndex(prevIndex)
-    await play(prevIndex)
-  }, [play, playlist, trackIndex, setTrackIndex])
+    const nextIndex = Math.max(
+      0,
+      ((isShuffle ? trackIndex : shuffledTrackIndex) - 1) % playlist.length,
+    )
+
+    if (isShuffle) setShuffledTrackIndex(nextIndex)
+    else setTrackIndex(nextIndex)
+
+    const nextTrack = isShuffle
+      ? shuffledPlaylist[nextIndex]
+      : playlist[nextIndex]
+
+    setCurrentTrack({...nextTrack})
+
+    await play(nextTrack.url)
+  }
 
   const handleSeekTo = async (value: number) => {
     await TrackPlayer.seekTo(value)
   }
 
-  const handleNext = useCallback(async () => {
+  const handleNext = async () => {
     await playNext()
     if (isPlaying) await TrackPlayer.play()
-  }, [isPlaying, playNext])
+  }
 
   const handlePrev = async () => {
     await playPrev()
     if (isPlaying) await TrackPlayer.play()
   }
 
-  const playRandomly = async () => {
-    if (!playlist.length) return
-
-    const randInt = getRandomInt(0, playlist.length)
-    setTrackIndex(randInt)
-    await play(randInt)
-    if (isPlaying) await TrackPlayer.play()
-  }
-
   useEffect(() => {
     const keepPlaying = async () => {
       await TrackPlayer.pause()
-      if (isShuffle) playRandomly()
-      else handleNext()
+      handleNext()
     }
 
     if (
       playState === State.Stopped &&
-      progress.position + 0.5 > progress.duration
+      progress.position + 1 > progress.duration
     ) {
       keepPlaying()
     }
@@ -181,9 +197,9 @@ export default function AudioPlayer() {
           ? `${trackIndex + 1}/${playlist.length}`
           : 'Add music files'}
       </Text>
-      <MusicImage uri={playlist[trackIndex]?.imageUrl || ''} />
+      <MusicImage uri={currentTrack?.imageUrl || ''} />
 
-      <Title numberOfLines={1}>{playlist[trackIndex]?.name || 'music'}</Title>
+      <Title numberOfLines={1}>{currentTrack?.name || 'music'}</Title>
 
       <AudioPlayerTimerContainer>
         <AudioPlayerTimerText>

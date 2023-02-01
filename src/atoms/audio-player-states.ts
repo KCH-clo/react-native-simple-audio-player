@@ -1,6 +1,6 @@
 import {atom} from 'recoil'
 
-interface Track {
+export interface Track {
   url: string
   imageUrl: string
   name: string
@@ -19,9 +19,24 @@ export const playlistState = atom<Track[]>({
   default: [],
 })
 
+export const shuffledPlaylistState = atom<Track[]>({
+  key: 'shuffled-playlist',
+  default: [],
+})
+
 export const currentTrackIndexState = atom<number>({
   key: 'current-track-index',
   default: 0,
+})
+
+export const currentShuffledTrackIndexState = atom<number>({
+  key: 'current-shuffled-track-index',
+  default: 0,
+})
+
+export const currentTrackState = atom<Track>({
+  key: 'current-track',
+  default: {url: '', imageUrl: '', name: ''},
 })
 
 export const playerStatusState = atom<PlayerStatus>({
