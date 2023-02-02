@@ -2,8 +2,9 @@
 
 ## Features
 1. find all music files in the storage.
-2. autoplay
+2. shuffle
 3. background play
+4. show cover image of a mp3 file
 
 ## Evironment
 1. React Native 0.69
