@@ -6253,10 +6253,10 @@ react-native-gradle-plugin@^0.0.7:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.7.tgz#96602f909745239deab7b589443f14fce5da2056"
   integrity sha512-+4JpbIx42zGTONhBTIXSyfyHICHC29VTvhkkoUOJAh/XHPEixpuBduYgf6Y4y9wsN1ARlQhBBoptTvXvAFQf5g==
 
-react-native-music-file-finder@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/react-native-music-file-finder/-/react-native-music-file-finder-1.0.5.tgz#fd92ba360b541f85f8fb8b79f276e8a504f03b19"
-  integrity sha512-g3ugVnd8pVlCCiu/dK7kZxvp1atrz94cV0SvOkgAyE3Ef3EBalUfJ/pjtTAtRz4rIcga7vXzNj5Ux1GXU135gA==
+react-native-music-file-finder@1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-music-file-finder/-/react-native-music-file-finder-1.0.7.tgz#694550a137c93aec3851c2eeb73be964d83db94a"
+  integrity sha512-7/e0FbOk89od5VIWuRGDMLEORURZjLzJ9BtPFDisp4SH1wcAcVakJwnq42+N+BQQ0mtVsxo9/HRqdxOIgBQBUQ==
 
 react-native-safe-area-context@^4.5.0:
   version "4.5.0"

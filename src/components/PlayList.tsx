@@ -40,7 +40,7 @@ export default function PlayList() {
   useEffect(() => {
     const func = async () => {
       await requestPermission()
-      setMusicInfos(await RNMusicFileFinder.getAllMusics(false))
+      setMusicInfos(await RNMusicFileFinder.getAllMusics(true))
     }
     func()
   }, [])
@@ -60,7 +60,7 @@ export default function PlayList() {
               const newTrack = {
                 url: musicInfo.path,
                 name: musicInfo.title,
-                imageUrl: '',
+                imageUrl: musicInfo.imagePath || '',
               }
               const newPlayList = [...playList, newTrack]
               setPlaylist(newPlayList)
